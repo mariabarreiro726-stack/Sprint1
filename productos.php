@@ -657,115 +657,163 @@ body::after{
 
         ?>
 
-        <?php while($row = mysqli_fetch_assoc($result)) { ?>
+      <?php while($row = mysqli_fetch_assoc($result)) { ?>
 
-            <div class="producto-tabla">
+    <div class="producto-tabla">
 
-                <?php if($row['estado'] == 'disponible') { ?>
+        <!-- BADGE ESTADO -->
+        <?php if($row['estado'] == 'disponible') { ?>
 
-                    <div class="badge-disponible">
-                        DISPONIBLE
-                    </div>
+            <div class="badge-disponible">
+                DISPONIBLE
+            </div>
 
-                <?php } else { ?>
+        <?php } else { ?>
 
-                    <div class="badge-vencido">
-                        VENCIDO
-                    </div>
+            <div class="badge-vencido">
+                VENCIDO
+            </div>
 
-                <?php } ?>
+        <?php } ?>
 
-                <?php if($row['usuario_id'] == $mi_id) { ?>
+        <!-- BADGE MIO -->
+        <?php if($row['usuario_id'] == $mi_id) { ?>
 
-                    <div class="badge-mio">
-                        MI PUBLICACIÓN
-                    </div>
+            <div class="badge-mio">
+                MI PUBLICACIÓN
+            </div>
 
-                <?php } ?>
+        <?php } ?>
 
-                <img
-                src="<?php echo $row['imagen']; ?>"
-                class="img-tabla">
+        <!-- IMAGEN -->
+        <img
+        src="<?php echo $row['imagen']; ?>"
+        class="img-tabla">
 
-                <div class="info">
+        <div class="info">
 
-                    <?php if (!empty($row['descripcion'])) { ?>
+            <!-- DESCRIPCIÓN -->
+            <?php if (!empty($row['descripcion'])) { ?>
 
-                        <p>
+                <p>
+                    <?php echo $row['descripcion']; ?>
+                </p>
 
-                            <?php echo $row['descripcion']; ?>
+            <?php } ?>
 
-                        </p>
+            <!-- FECHA -->
+            <p>
+                <b>Vence:</b>
+                <?php echo $row['fecha_vencimiento']; ?>
+            </p>
 
-                    <?php } ?>
+            <!-- BOTÓN SOLICITAR SOLO SI NO ES MIO Y ESTÁ DISPONIBLE -->
+            <?php if($row['usuario_id'] != $mi_id && $row['estado'] == 'disponible') { ?>
 
-                    <p>
-                        <b>Vence:</b>
-                        <?php echo $row['fecha_vencimiento']; ?>
-                    </p>
+                <button type="button" class="btn-solicitar"
+                        onclick="abrirModal(<?php echo $row['id']; ?>)">
+                    Solicitar intercambio
+                </button>
 
-                    <!-- BOTÓN SOLICITAR -->
+            <?php } ?>
 
-                    <?php if($row['usuario_id'] != $mi_id) { ?>
+            <!-- MENSAJE SI ES TUYO -->
+            <?php if($row['usuario_id'] == $mi_id) { ?>
 
-                        <form action="solicitar_intercambio.php" method="POST">
+                <p style="color:#22c55e; font-weight:600; margin-top:10px;">
+                    Este es tu producto
+                </p>
 
-                            <input
-                            type="hidden"
-                            name="publicacion_id"
-                            value="<?php echo $row['id']; ?>">
+            <?php } ?>
 
-                            <button class="btn-solicitar">
+            <!-- MENSAJE SI ESTÁ VENCIDO -->
+            <?php if($row['estado'] == 'vencido') { ?>
 
-                                Solicitar intercambio
+                <p style="color:#ef4444; font-weight:600; margin-top:10px;">
+                    Producto no disponible
+                </p>
 
-                            </button>
+            <?php } ?>
 
-                        </form>
+            <!-- BOTONES DEL DUEÑO -->
+            <?php if($row['usuario_id'] == $mi_id) { ?>
 
-                    <?php } ?>
+                <a href="editar.php?id=<?php echo $row['id']; ?>"
+                class="btn-editar">
+                    Editar producto
+                </a>
 
-                    <!-- BOTONES DEL DUEÑO -->
+                <form action="eliminar.php" method="POST">
 
-                    <?php if($row['usuario_id'] == $mi_id) { ?>
+                    <input
+                    type="hidden"
+                    name="id"
+                    value="<?php echo $row['id']; ?>">
 
-                        <a href="editar.php?id=<?php echo $row['id']; ?>"
-                        class="btn-editar">
+                    <button
+                    class="btn-eliminar"
+                    onclick="return confirm('¿Eliminar este producto?')">
+                        Eliminar producto
+                    </button>
 
-                            Editar producto
+                </form>
 
-                        </a>
+            <?php } ?>
 
-                        <form action="eliminar.php" method="POST">
+        </div>
 
-                            <input
-                            type="hidden"
-                            name="id"
-                            value="<?php echo $row['id']; ?>">
+    </div>
 
-                            <button
-                            class="btn-eliminar"
-                            onclick="return confirm('¿Eliminar este producto?')">
+<?php } ?>
 
-                                Eliminar producto
-
-                            </button>
-
-                        </form>
-
-                    <?php } ?>
 
                 </div>
 
             </div>
 
-        <?php } ?>
+   
 
         </div>
 
     </div>
 
 </div>
+<div id="modalIntercambio" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center;">
+
+<div style="background:#111827; padding:25px; border-radius:20px; width:400px;">
+
+<h3>Ofrecer producto 🔄</h3>
+
+<form action="guardar_intercambio.php" method="POST" enctype="multipart/form-data">
+
+<input type="hidden" name="publicacion_id" id="publicacion_id">
+
+<input type="text" name="producto" placeholder="Nombre del producto" required>
+
+<input type="date" name="fecha" required>
+
+<input type="file" name="imagen" required>
+
+<textarea name="descripcion" placeholder="Descripción" required></textarea>
+
+<button type="submit" class="btn-solicitar">Solicitar intercambio</button>
+
+<button type="button" onclick="cerrarModal()" style="background:red; margin-top:10px;">Cancelar</button>
+
+</form>
+
+</div>
+</div>
+<script>
+function abrirModal(id){
+    document.getElementById("modalIntercambio").style.display="flex";
+    document.getElementById("publicacion_id").value=id;
+}
+
+function cerrarModal(){
+    document.getElementById("modalIntercambio").style.display="none";
+}
+</script>
 
 </body>
 </html>
