@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 
@@ -148,17 +149,29 @@ body::after{
 
 .logo{
 
-    font-size:30px;
+    display:flex;
 
-    font-weight:700;
+    justify-content:center;
 
-    margin-bottom:50px;
+    align-items:center;
 
-    text-align:center;
+    margin-bottom:60px;
 }
 
-.logo span{
-    color:#d946ef;
+.logo-img{
+
+    width:170px;
+
+    object-fit:contain;
+
+    filter:drop-shadow(0 0 15px rgba(192,38,211,0.35));
+
+    transition:0.3s;
+}
+
+.logo-img:hover{
+
+    transform:scale(1.05);
 }
 
 .sidebar-menu{
@@ -348,6 +361,7 @@ body::after{
 
     font-weight:600;
 }
+
 .badge-vencido{
 
     position:absolute;
@@ -454,6 +468,40 @@ body::after{
     transform:scale(1.02);
 }
 
+.btn-eliminar{
+
+    width:100%;
+
+    margin-top:12px;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:linear-gradient(
+    90deg,
+    #ef4444,
+    #dc2626
+    );
+
+    color:white;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+.btn-eliminar:hover{
+
+    transform:scale(1.02);
+
+    box-shadow:0 0 20px rgba(239,68,68,0.4);
+}
+
 /* Empty */
 
 .empty{
@@ -518,9 +566,13 @@ body::after{
 
     <div class="sidebar">
 
-        <div class="logo">
-            Neo<span>Panel</span>
-        </div>
+     <div class="logo">
+
+    <img
+    src="LOGO/logo.png"
+    class="logo-img">
+
+</div>
 
         <div class="sidebar-menu">
 
@@ -538,6 +590,10 @@ body::after{
                 <i class="bi bi-box-seam"></i>
                 <span>Intercambios</span>
             </a>
+            <a href="puntos.php">
+    <i class="bi bi-geo-alt-fill"></i>
+    <span>Puntos de recolección</span>
+</a>
 
             <a href="notificacion.php">
                 <i class="bi bi-bell-fill"></i>
@@ -599,23 +655,26 @@ body::after{
             ";
         }
 
-        while($row = mysqli_fetch_assoc($result)) {
         ?>
 
+        <?php while($row = mysqli_fetch_assoc($result)) { ?>
+
             <div class="producto-tabla">
-<?php if($row['estado'] == 'disponible') { ?>
 
-    <div class="badge-disponible">
-        DISPONIBLE
-    </div>
+                <?php if($row['estado'] == 'disponible') { ?>
 
-<?php } else { ?>
+                    <div class="badge-disponible">
+                        DISPONIBLE
+                    </div>
 
-    <div class="badge-vencido">
-        VENCIDO
-    </div>
+                <?php } else { ?>
 
-<?php } ?>
+                    <div class="badge-vencido">
+                        VENCIDO
+                    </div>
+
+                <?php } ?>
+
                 <?php if($row['usuario_id'] == $mi_id) { ?>
 
                     <div class="badge-mio">
@@ -645,6 +704,8 @@ body::after{
                         <?php echo $row['fecha_vencimiento']; ?>
                     </p>
 
+                    <!-- BOTÓN SOLICITAR -->
+
                     <?php if($row['usuario_id'] != $mi_id) { ?>
 
                         <form action="solicitar_intercambio.php" method="POST">
@@ -664,6 +725,8 @@ body::after{
 
                     <?php } ?>
 
+                    <!-- BOTONES DEL DUEÑO -->
+
                     <?php if($row['usuario_id'] == $mi_id) { ?>
 
                         <a href="editar.php?id=<?php echo $row['id']; ?>"
@@ -672,6 +735,23 @@ body::after{
                             Editar producto
 
                         </a>
+
+                        <form action="eliminar.php" method="POST">
+
+                            <input
+                            type="hidden"
+                            name="id"
+                            value="<?php echo $row['id']; ?>">
+
+                            <button
+                            class="btn-eliminar"
+                            onclick="return confirm('¿Eliminar este producto?')">
+
+                                Eliminar producto
+
+                            </button>
+
+                        </form>
 
                     <?php } ?>
 
@@ -689,3 +769,4 @@ body::after{
 
 </body>
 </html>
+```

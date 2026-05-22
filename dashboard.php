@@ -195,17 +195,29 @@ body::after{
 
 .logo{
 
-    font-size:30px;
+    display:flex;
 
-    font-weight:700;
+    justify-content:center;
 
-    margin-bottom:50px;
+    align-items:center;
 
-    text-align:center;
+    margin-bottom:60px;
 }
 
-.logo span{
-    color:#d946ef;
+.logo-img{
+
+    width:170px;
+
+    object-fit:contain;
+
+    filter:drop-shadow(0 0 15px rgba(192,38,211,0.35));
+
+    transition:0.3s;
+}
+
+.logo-img:hover{
+
+    transform:scale(1.05);
 }
 
 .sidebar-menu{
@@ -508,37 +520,7 @@ body::after{
 
 /* Botón */
 
-.btn-ver{
 
-    width:100%;
-
-    margin-top:15px;
-
-    padding:14px;
-
-    border:none;
-
-    border-radius:16px;
-
-    background:linear-gradient(
-    90deg,
-    #c026d3,
-    #06b6d4
-    );
-
-    color:white;
-
-    font-weight:600;
-
-    transition:0.3s;
-
-    cursor:pointer;
-}
-
-.btn-ver:hover{
-
-    transform:scale(1.02);
-}
 
 /* Responsive */
 
@@ -592,9 +574,12 @@ body::after{
     <div class="sidebar">
 
         <div class="logo">
-            Neo<span>Panel</span>
-        </div>
 
+    <img
+    src="LOGO/logo.png"
+    class="logo-img">
+
+</div>
         <div class="sidebar-menu">
 
             <a href="dashboard.php">
@@ -611,6 +596,10 @@ body::after{
                 <i class="bi bi-box-seam"></i>
                 <span>Intercambios</span>
             </a>
+            <a href="puntos.php">
+    <i class="bi bi-geo-alt-fill"></i>
+    <span>Puntos de recolección</span>
+</a>
 
             <a href="notificacion.php">
                 <i class="bi bi-bell-fill"></i>
@@ -778,13 +767,7 @@ body::after{
 
                 </h5>
 
-                <p>
-
-                    <b>Intercambia por:</b>
-
-                    <?php echo $row['quieres']; ?>
-
-                </p>
+                
 
                 <?php if (!empty($row['descripcion'])) { ?>
 
@@ -807,11 +790,7 @@ body::after{
 
                 <?php } ?>
 
-                <button class="btn-ver">
-
-                    Ver más
-
-                </button>
+               
 
             </div>
 
