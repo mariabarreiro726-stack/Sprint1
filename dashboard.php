@@ -778,13 +778,7 @@ body::after{
 
                 </h5>
 
-                <p>
-
-                    <b>Intercambia por:</b>
-
-                    <?php echo $row['quieres']; ?>
-
-                </p>
+                
 
                 <?php if (!empty($row['descripcion'])) { ?>
 
