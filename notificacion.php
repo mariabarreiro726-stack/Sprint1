@@ -37,14 +37,28 @@ $sql = "SELECT
         INNER JOIN usuarios u
         ON i.solicitante_id = u.id
 
-        WHERE p.usuario_id = ?
-        AND i.estado = 'pendiente'
+        WHERE (
+
+            p.usuario_id = ?
+            AND i.estado = 'pendiente'
+
+        )
+
+        OR (
+
+            i.solicitante_id = ?
+            AND (
+                i.estado = 'aceptado'
+                OR i.estado = 'rechazado'
+            )
+
+        )
 
         ORDER BY i.fecha_solicitud DESC";
 
 $stmt = $conn->prepare($sql);
 
-$stmt->bind_param("i", $mi_id);
+$stmt->bind_param("ii", $mi_id, $mi_id);
 
 $stmt->execute();
 
@@ -174,7 +188,7 @@ body::after{
     height:100vh;
 }
 
-..logo{
+.logo{
 
     display:flex;
 
@@ -322,6 +336,50 @@ body::after{
     color:#cbd5e1;
 }
 
+/* ALERTAS */
+
+.alert-success{
+
+    background:linear-gradient(
+    90deg,
+    #10b981,
+    #22c55e
+    );
+
+    padding:18px;
+
+    border-radius:18px;
+
+    margin-bottom:25px;
+
+    color:white;
+
+    font-weight:600;
+
+    box-shadow:0 0 20px rgba(34,197,94,0.35);
+}
+
+.alert-error{
+
+    background:linear-gradient(
+    90deg,
+    #ef4444,
+    #dc2626
+    );
+
+    padding:18px;
+
+    border-radius:18px;
+
+    margin-bottom:25px;
+
+    color:white;
+
+    font-weight:600;
+
+    box-shadow:0 0 20px rgba(239,68,68,0.35);
+}
+
 /* Notifications */
 
 .notifications{
@@ -403,13 +461,51 @@ body::after{
     margin-bottom:10px;
 }
 
-/* Badge */
+/* Badges */
 
 .badge-pendiente{
 
     display:inline-block;
 
     background:#f59e0b;
+
+    color:white;
+
+    padding:8px 14px;
+
+    border-radius:14px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    margin-bottom:15px;
+}
+
+.badge-aceptado{
+
+    display:inline-block;
+
+    background:#22c55e;
+
+    color:white;
+
+    padding:8px 14px;
+
+    border-radius:14px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    margin-bottom:15px;
+}
+
+.badge-rechazado{
+
+    display:inline-block;
+
+    background:#ef4444;
 
     color:white;
 
@@ -508,11 +604,11 @@ body::after{
 
       <div class="logo">
 
-    <img
-    src="LOGO/logo.png"
-    class="logo-img">
+        <img
+        src="LOGO/logo.png"
+        class="logo-img">
 
-</div>
+    </div>
 
         <div class="sidebar-menu">
 
@@ -530,6 +626,10 @@ body::after{
                 <i class="bi bi-box-seam"></i>
                 <span>Intercambios</span>
             </a>
+            <a href="puntos.php">
+    <i class="bi bi-geo-alt-fill"></i>
+    <span>Puntos de recolección</span>
+</a>
 
             <a href="notificacion.php">
                 <i class="bi bi-bell-fill"></i>
@@ -569,6 +669,28 @@ body::after{
 
         </div>
 
+        <!-- ALERTAS -->
+
+        <?php if(isset($_GET['ok'])) { ?>
+
+            <div class="alert-success">
+
+                <?php echo $_GET['ok']; ?>
+
+            </div>
+
+        <?php } ?>
+
+        <?php if(isset($_GET['error'])) { ?>
+
+            <div class="alert-error">
+
+                <?php echo $_GET['error']; ?>
+
+            </div>
+
+        <?php } ?>
+
         <div class="notifications">
 
         <?php if ($result->num_rows == 0) { ?>
@@ -591,11 +713,29 @@ body::after{
 
                 <div class="notification-info">
 
-                    <span class="badge-pendiente">
+                    <?php if($row['estado'] == 'pendiente') { ?>
 
-                        PENDIENTE
+                        <span class="badge-pendiente">
+                            PENDIENTE
+                        </span>
 
-                    </span>
+                    <?php } ?>
+
+                    <?php if($row['estado'] == 'aceptado') { ?>
+
+                        <span class="badge-aceptado">
+                            ACEPTADO
+                        </span>
+
+                    <?php } ?>
+
+                    <?php if($row['estado'] == 'rechazado') { ?>
+
+                        <span class="badge-rechazado">
+                            RECHAZADO
+                        </span>
+
+                    <?php } ?>
 
                     <h4>
 
@@ -605,7 +745,23 @@ body::after{
 
                     <p>
 
+                    <?php if($row['estado'] == 'pendiente') { ?>
+
                         quiere intercambiar contigo 🚀
+
+                    <?php } ?>
+
+                    <?php if($row['estado'] == 'aceptado') { ?>
+
+                        aceptó tu intercambio exitosamente ✅
+
+                    <?php } ?>
+
+                    <?php if($row['estado'] == 'rechazado') { ?>
+
+                        rechazó tu intercambio ❌
+
+                    <?php } ?>
 
                     </p>
 
@@ -632,6 +788,8 @@ body::after{
                         <?php echo $row['fecha_vencimiento']; ?>
 
                     </p>
+
+                    <?php if($row['estado'] == 'pendiente') { ?>
 
                     <div class="buttons">
 
@@ -666,6 +824,8 @@ body::after{
                         </form>
 
                     </div>
+
+                    <?php } ?>
 
                 </div>
 

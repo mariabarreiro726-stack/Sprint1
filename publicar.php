@@ -135,17 +135,29 @@ body::after{
 
 .logo{
 
-    font-size:30px;
+    display:flex;
 
-    font-weight:700;
+    justify-content:center;
 
-    margin-bottom:50px;
+    align-items:center;
 
-    text-align:center;
+    margin-bottom:60px;
 }
 
-.logo span{
-    color:#d946ef;
+.logo-img{
+
+    width:170px;
+
+    object-fit:contain;
+
+    filter:drop-shadow(0 0 15px rgba(192,38,211,0.35));
+
+    transition:0.3s;
+}
+
+.logo-img:hover{
+
+    transform:scale(1.05);
 }
 
 .sidebar-menu{
@@ -524,8 +536,12 @@ textarea.form-control{
     <div class="sidebar">
 
         <div class="logo">
-            Neo<span>Panel</span>
-        </div>
+
+    <img
+    src="LOGO/logo.png"
+    class="logo-img">
+
+</div>
 
         <div class="sidebar-menu">
 
@@ -543,6 +559,10 @@ textarea.form-control{
                 <i class="bi bi-box-seam"></i>
                 <span>Intercambios</span>
             </a>
+            <a href="puntos.php">
+    <i class="bi bi-geo-alt-fill"></i>
+    <span>Puntos de recolección</span>
+</a>
 
             <a href="notificacion.php">
                 <i class="bi bi-bell-fill"></i>
