@@ -1,0 +1,125 @@
+/* =========================
+   RESET BÁSICO
+   ========================= */
+/* Elimina márgenes y paddings por defecto del navegador */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Hace que el tamaño incluya borde y padding */
+}
+
+
+/* =========================
+   ESTILOS GENERALES DEL BODY
+   ========================= */
+body {
+    font-family: 'Poppins', sans-serif; /* Fuente moderna */
+    background: linear-gradient(135deg, #1f1c2c, #928dab); /* Fondo degradado */
+    min-height: 100vh; /* Altura mínima de toda la pantalla */
+}
+
+
+/* =========================
+   CONTENEDOR PRINCIPAL
+   ========================= */
+.container {
+    padding: 20px; /* Espaciado interno */
+}
+
+
+/* =========================
+   TARJETAS (CARDS)
+   ========================= */
+.card {
+    border-radius: 15px; /* Bordes redondeados */
+    border: none; /* Quita borde por defecto */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Animación suave */
+}
+
+/* Efecto al pasar el mouse */
+.card:hover {
+    transform: translateY(-5px); /* Se eleva un poquito */
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.2); /* Sombra elegante */
+}
+
+
+/* =========================
+   FORMULARIOS
+   ========================= */
+form.card {
+    background: #fff; /* Fondo blanco */
+}
+
+/* Inputs, textarea y select */
+input, textarea, select {
+    border-radius: 10px !important; /* Bordes redondeados */
+    border: 1px solid #ccc !important; /* Borde gris */
+    padding: 10px !important; /* Espaciado interno */
+    transition: 0.2s; /* Animación suave */
+}
+
+/* Cuando el usuario hace clic (focus) */
+input:focus, textarea:focus, select:focus {
+    border-color: #6a5acd !important; /* Cambia color del borde */
+    box-shadow: 0 0 5px rgba(106,90,205,0.5); /* Brillo suave */
+}
+
+
+/* =========================
+   BOTONES
+   ========================= */
+.btn {
+    border-radius: 10px !important; /* Botones redondeados */
+}
+
+/* Botón principal */
+.btn-primary {
+    background-color: #6a5acd; /* Color morado */
+    border: none;
+}
+
+/* Hover del botón principal */
+.btn-primary:hover {
+    background-color: #5848c2; /* Morado más oscuro */
+}
+
+/* Botón eliminar */
+.btn-danger {
+    background-color: #dc3545; /* Rojo */
+}
+
+
+/* =========================
+   FOOTER DE LAS CARDS
+   ========================= */
+.card-footer {
+    background: transparent; /* Sin fondo */
+    border-top: none; /* Sin línea superior */
+    display: flex;
+    justify-content: space-between; /* Separa botones */
+}
+
+
+/* =========================
+   TÍTULOS
+   ========================= */
+h3 {
+    color: white; /* Texto blanco (para fondo oscuro) */
+}
+
+
+/* =========================
+   RESPONSIVE (PANTALLAS PEQUEÑAS)
+   ========================= */
+@media (max-width: 768px) {
+
+    /* Cambia el fondo en móviles */
+    body {
+        background: linear-gradient(135deg, #2c3e50, #4ca1af);
+    }
+
+    /* Ajusta separación de tarjetas */
+    .card {
+        margin-bottom: 15px;
+    }
+}
