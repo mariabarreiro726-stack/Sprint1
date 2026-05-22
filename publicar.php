@@ -655,19 +655,20 @@ textarea.form-control{
 
                 <!-- Fecha -->
 
-                <div class="mb-4">
+               <div class="mb-4">
 
-                    <label class="form-label">
-                        Fecha de vencimiento
-                    </label>
+    <label class="form-label">
+        Fecha de vencimiento
+    </label>
 
-                    <input
-                    type="date"
-                    name="fecha_vencimiento"
-                    class="form-control"
-                    required>
+    <input
+    type="date"
+    name="fecha_vencimiento"
+    class="form-control"
+    min="<?php echo date('Y-m-d'); ?>"
+    required>
 
-                </div>
+</div>
 
                 <!-- Descripción -->
 
